@@ -147,7 +147,7 @@
 
         // ==================== GITHUB API HELPERS ====================
         async function fetchFromGitHub(path) {
-            const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`;
+            const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/${path}`;
             const res = await fetch(url);
             if (!res.ok) throw new Error("Failed to fetch from GitHub");
             return await res.json();
