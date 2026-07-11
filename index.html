@@ -3,273 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scriptures • Digital Library</title>
+  <title>Śrīmad Bhagavad Gītā • Reader</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@400;500&amp;display=swap');
     
-    body { font-family: 'Inter', system_ui, sans-serif; }
-    .heading-serif { font-family: 'Playfair Display', Georgia, serif; }
-    
-    .sanskrit-text {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: #e8dcc4;
+    body {
+      font-family: 'Inter', system_ui, sans-serif;
     }
-    
-    .verse-card {
-      transition: all 0.2s ease;
+    .heading-serif {
+      font-family: 'Playfair Display', Georgia, serif;
     }
-    
-    .nav-active {
-      background-color: #1c1915;
-      border-color: #c9a26f;
-      color: #c9a26f;
-    }
-    
-    .scripture-content {
-      max-width: 780px;
+    .reader-container {
+      max-width: 720px;
       margin-left: auto;
       margin-right: auto;
+    }
+    .sanskrit {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: #e8dcc4;
+    }
+    .verse-number {
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
     }
   </style>
 </head>
 <body class="bg-[#0f0e0c] text-[#e8e0d0]">
-  
-  <!-- Header -->
+
+  <!-- Top Bar -->
   <div class="border-b border-[#3a3024] bg-[#0f0e0c]">
-    <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-x-3">
-        <div class="w-10 h-10 bg-[#c9a26f] rounded-2xl flex items-center justify-center">
-          <i class="fa-solid fa-book text-[#0f0e0c] text-2xl"></i>
+        <div class="w-9 h-9 bg-[#c9a26f] rounded-2xl flex items-center justify-center">
+          <i class="fa-solid fa-book text-[#0f0e0c]"></i>
         </div>
         <div>
-          <h1 class="text-2xl font-semibold tracking-tight heading-serif">Scriptures</h1>
-          <p class="text-[#a38b5f] text-xs tracking-[1px]">DIGITAL LIBRARY</p>
+          <span class="font-semibold tracking-tight heading-serif text-xl">Scriptures</span>
         </div>
       </div>
       
-      <div class="flex items-center gap-x-2 text-sm">
-        <div class="px-4 py-1.5 bg-[#1c1915] rounded-2xl border border-[#3a3024] flex items-center gap-x-2">
-          <i class="fa-solid fa-globe text-[#c9a26f]"></i>
-          <span class="text-[#c9a26f]">Public Library</span>
-        </div>
-      </div>
+      <button onclick="goBackToLibrary()" 
+              class="flex items-center gap-x-2 px-4 py-2 text-sm bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl transition-colors">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Library</span>
+      </button>
     </div>
   </div>
 
-  <div class="max-w-7xl mx-auto flex">
+  <div class="max-w-5xl mx-auto px-6 pt-8">
     
-    <!-- Sidebar: Scriptures -->
-    <div class="w-72 border-r border-[#3a3024] min-h-screen p-6">
-      <div class="mb-4 px-1">
-        <div class="text-xs tracking-[1.5px] text-[#a38b5f] mb-2">ALL SCRIPTURES</div>
-      </div>
-      
-      <div id="scripture-list" class="space-y-1">
-        <!-- Populated dynamically via JavaScript -->
-        <div class="text-[#a38b5f] text-sm px-3 py-2">Loading scriptures...</div>
-      </div>
+    <!-- Scripture + Chapter Title -->
+    <div id="reader-header" class="hidden mb-6 text-center">
+      <div class="text-[#a38b5f] text-sm tracking-[2px]" id="scripture-name"></div>
+      <div class="text-3xl font-semibold heading-serif mt-1" id="chapter-name"></div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 p-8">
-      
-      <!-- Scripture Header -->
-      <div id="scripture-header" class="hidden mb-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 id="scripture-title" class="text-4xl font-semibold heading-serif tracking-tight"></h2>
-            <p id="scripture-subtitle" class="text-[#a38b5f] mt-1"></p>
+    <!-- Verse Reader -->
+    <div id="verse-reader" class="hidden">
+      <div class="reader-container">
+        
+        <!-- Progress -->
+        <div class="flex items-center justify-between mb-4 px-1">
+          <div class="text-sm text-[#a38b5f]">
+            <span id="current-verse">1</span> / <span id="total-verses">28</span>
           </div>
-          <button onclick="showScriptureList()" 
-                  class="px-5 py-2 text-sm flex items-center gap-x-2 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl transition-colors">
+          <div class="text-xs px-3 py-1 bg-[#1c1915] rounded-full border border-[#3a3024]" id="verse-label">
+            Verse
+          </div>
+        </div>
+
+        <!-- Main Verse Card -->
+        <div class="bg-[#1c1915] border border-[#3a3024] rounded-3xl p-9 min-h-[420px]">
+          
+          <!-- Sanskrit -->
+          <div id="sanskrit-text" class="sanskrit leading-relaxed mb-6">
+          </div>
+
+          <!-- Translation -->
+          <div class="mb-6">
+            <div class="text-[#a38b5f] text-xs tracking-wider mb-2">TRANSLATION</div>
+            <div id="translation-text" class="text-[#d4c9b0] leading-relaxed text-[15.5px]">
+            </div>
+          </div>
+
+          <!-- Explanation -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-[#a38b5f] text-xs tracking-wider">EXPLANATION</div>
+              <button onclick="toggleExplanation()" 
+                      class="text-xs text-[#c9a26f] hover:underline flex items-center gap-x-1">
+                <span id="explanation-toggle-text">Show</span>
+              </button>
+            </div>
+            <div id="explanation-text" class="hidden text-[#b8a98a] leading-relaxed text-[14.8px] border-l-2 border-[#3a3024] pl-4">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between mt-6">
+          <button onclick="previousVerse()" 
+                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl transition-all disabled:opacity-40"
+                  id="btn-prev">
             <i class="fa-solid fa-arrow-left"></i>
-            <span>Back to Library</span>
+            <span>Previous</span>
+          </button>
+
+          <button onclick="nextVerse()" 
+                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-2xl transition-all disabled:opacity-40"
+                  id="btn-next">
+            <span>Next</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
-      </div>
 
-      <!-- Chapters Grid -->
-      <div id="chapters-section" class="hidden">
-        <div class="text-xs tracking-[1.5px] text-[#a38b5f] mb-3 px-1">CHAPTERS</div>
-        <div id="chapters-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          <!-- Populated dynamically -->
-        </div>
       </div>
-
-      <!-- Reading Area (Digital Scripture Book Style) -->
-      <div id="reading-area" class="hidden">
-        <div class="scripture-content">
-          <div id="reading-content" class="space-y-8">
-            <!-- Content loaded here dynamically -->
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Initial State -->
+    <div id="initial-state">
+      <div class="max-w-md mx-auto text-center pt-12">
+        <i class="fa-solid fa-book text-5xl text-[#3a3024]"></i>
+        <h2 class="mt-6 text-2xl font-semibold heading-serif">Scripture Reader</h2>
+        <p class="text-[#a38b5f] mt-2">Select a scripture from the library to begin reading verse by verse.</p>
+        
+        <button onclick="loadScriptureList()" 
+                class="mt-8 px-8 py-3 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl text-sm flex items-center gap-x-2 mx-auto">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>Browse Scriptures</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // ==================== CONFIGURATION ====================
-    const GITHUB_OWNER = "muralikini";           // ← Change if needed
-    const GITHUB_REPO = "indianscriptures";      // ← Your repo name
-    const SCRIPTURES_PATH = "scriptures";        // Folder containing all scriptures
+    // ================== CONFIG ==================
+    const GITHUB_OWNER = "muralikini";
+    const GITHUB_REPO = "indianscriptures";
+    const SCRIPTURES_PATH = "scriptures";
 
+    let verses = [];
+    let currentIndex = 0;
     let currentScripture = "";
     let currentChapter = "";
 
-    // ==================== FETCH SCRIPTURES ====================
-    async function loadScriptures() {
-      const container = document.getElementById("scripture-list");
-      container.innerHTML = `<div class="text-[#a38b5f] text-sm px-3 py-2">Loading...</div>`;
-
-      try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}`);
-        const data = await res.json();
-
-        container.innerHTML = "";
-
-        data.forEach(item => {
-          if (item.type === "dir") {
-            const div = document.createElement("div");
-            div.className = `px-4 py-3 rounded-2xl cursor-pointer flex items-center gap-x-3 hover:bg-[#1c1915] transition-colors text-sm`;
-            div.innerHTML = `
-              <i class="fa-solid fa-book text-[#c9a26f]"></i>
-              <span>${item.name}</span>
-            `;
-            div.onclick = () => loadChapters(item.name);
-            container.appendChild(div);
-          }
-        });
-
-      } catch (error) {
-        container.innerHTML = `<div class="text-red-400 text-sm px-3">Failed to load scriptures. Make sure repo is public.</div>`;
-      }
-    }
-
-    // ==================== LOAD CHAPTERS ====================
-    async function loadChapters(scriptureName) {
-      currentScripture = scriptureName;
-      
-      document.getElementById("scripture-header").classList.remove("hidden");
-      document.getElementById("chapters-section").classList.remove("hidden");
-      document.getElementById("reading-area").classList.add("hidden");
-
-      document.getElementById("scripture-title").innerText = scriptureName;
-      document.getElementById("scripture-subtitle").innerText = "Select a chapter to begin reading";
-
-      const grid = document.getElementById("chapters-grid");
-      grid.innerHTML = `<div class="col-span-full text-[#a38b5f]">Loading chapters...</div>`;
-
-      try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}`);
-        const data = await res.json();
-
-        grid.innerHTML = "";
-
-        data.forEach(file => {
-          if (file.name.endsWith(".md")) {
-            const card = document.createElement("div");
-            card.className = `bg-[#1c1915] border border-[#3a3024] hover:border-[#c9a26f] rounded-2xl p-4 cursor-pointer transition-all`;
-            
-            const chapterName = file.name.replace(".md", "").replace(/_/g, " ");
-            
-            card.innerHTML = `
-              <div class="flex items-center gap-x-3">
-                <div class="w-9 h-9 bg-[#29251f] rounded-2xl flex items-center justify-center text-[#c9a26f]">
-                  <i class="fa-solid fa-scroll"></i>
-                </div>
-                <div>
-                  <div class="font-medium">${chapterName}</div>
-                </div>
-              </div>
-            `;
-            
-            card.onclick = () => loadChapterContent(scriptureName, file.name, chapterName);
-            grid.appendChild(card);
-          }
-        });
-
-      } catch (error) {
-        grid.innerHTML = `<div class="text-red-400">Failed to load chapters.</div>`;
-      }
-    }
-
-    // ==================== LOAD CHAPTER CONTENT (Beautiful Book Style) ====================
-    async function loadChapterContent(scriptureName, fileName, displayName) {
-      currentChapter = displayName;
-      
-      document.getElementById("chapters-section").classList.add("hidden");
-      document.getElementById("reading-area").classList.remove("hidden");
-
-      const contentDiv = document.getElementById("reading-content");
-      contentDiv.innerHTML = `
-        <div class="text-center py-12">
-          <i class="fa-solid fa-spinner fa-spin text-2xl text-[#c9a26f]"></i>
-          <p class="mt-4 text-[#a38b5f]">Loading sacred text...</p>
+    // ================== LOAD SCRIPTURE LIST ==================
+    async function loadScriptureList() {
+      document.getElementById("initial-state").innerHTML = `
+        <div class="max-w-md mx-auto text-center pt-8">
+          <p class="text-[#a38b5f]">Loading scriptures...</p>
         </div>
       `;
 
       try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}/${fileName}`);
-        const data = await res.json();
-        
-        // Decode base64 content
-        const markdown = atob(data.content);
-        
-        // Simple beautiful rendering
-        contentDiv.innerHTML = `
-          <div class="mb-8">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="text-3xl font-semibold heading-serif">${displayName}</h3>
-                <p class="text-[#a38b5f]">${scriptureName}</p>
-              </div>
-              <button onclick="loadChapters('${scriptureName}')" 
-                      class="px-4 py-2 text-sm bg-[#1c1915] border border-[#3a3024] rounded-2xl flex items-center gap-x-2 hover:bg-[#29251f]">
-                <i class="fa-solid fa-list"></i>
-                <span>Chapters</span>
-              </button>
-            </div>
-          </div>
-          
-          <div class="prose prose-invert max-w-none">
-            ${renderMarkdownBeautifully(markdown)}
-          </div>
-        `;
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}`);
+        const folders = await res.json();
 
-      } catch (error) {
-        contentDiv.innerHTML = `<div class="text-red-400">Failed to load chapter content.</div>`;
+        let html = `<div class="max-w-2xl mx-auto"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
+
+        folders.forEach(folder => {
+          if (folder.type === "dir") {
+            html += `
+              <div onclick="selectScripture('${folder.name}')" 
+                   class="flex items-center gap-x-4 px-5 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer transition-all">
+                <i class="fa-solid fa-book text-[#c9a26f] text-xl"></i>
+                <span class="font-medium">${folder.name}</span>
+              </div>
+            `;
+          }
+        });
+
+        html += `</div></div>`;
+        document.getElementById("initial-state").innerHTML = html;
+
+      } catch (e) {
+        document.getElementById("initial-state").innerHTML = `<p class="text-red-400 text-center">Failed to load. Check repo settings.</p>`;
       }
     }
 
-    // Simple but beautiful Markdown renderer (for scripture style)
-    function renderMarkdownBeautifully(markdown) {
-      let html = markdown
-        .replace(/^### (.*$)/gm, '<h3 class="text-xl font-semibold mt-8 mb-3 text-[#c9a26f]">$1</h3>')
-        .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-semibold mt-10 mb-4 heading-serif">$1</h2>')
-        .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-semibold mt-2 mb-6 heading-serif">$1</h1>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#e8dcc4]">$1</strong>')
-        .replace(/\n\n/g, '</p><p class="mb-4 text-[#d4c9b0] leading-relaxed">')
-        .replace(/\n/g, '<br>');
+    // ================== SELECT SCRIPTURE → SHOW CHAPTERS ==================
+    async function selectScripture(scriptureName) {
+      currentScripture = scriptureName;
 
-      // Wrap in paragraphs
-      html = `<p class="mb-4 text-[#d4c9b0] leading-relaxed">${html}</p>`;
-      
-      return html;
+      document.getElementById("initial-state").innerHTML = `
+        <div class="max-w-md mx-auto text-center pt-8">
+          <p class="text-[#a38b5f]">Loading chapters...</p>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}`);
+        const files = await res.json();
+
+        let html = `<div class="max-w-2xl mx-auto"><div class="text-[#a38b5f] text-sm mb-3 px-1">Select Chapter</div><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">`;
+
+        files.forEach(file => {
+          if (file.name.endsWith(".md")) {
+            const name = file.name.replace(".md", "").replace(/_/g, " ");
+            html += `
+              <div onclick="loadChapter('${scriptureName}', '${file.name}', '${name}')" 
+                   class="px-5 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer text-sm transition-all">
+                ${name}
+              </div>
+            `;
+          }
+        });
+
+        html += `</div></div>`;
+        document.getElementById("initial-state").innerHTML = html;
+
+      } catch (e) {
+        alert("Failed to load chapters");
+      }
     }
 
-    function showScriptureList() {
-      document.getElementById("scripture-header").classList.add("hidden");
-      document.getElementById("chapters-section").classList.add("hidden");
-      document.getElementById("reading-area").classList.add("hidden");
+    // ================== LOAD CHAPTER & PARSE VERSES ==================
+    async function loadChapter(scriptureName, fileName, chapterDisplayName) {
+      currentScripture = scriptureName;
+      currentChapter = chapterDisplayName;
+
+      document.getElementById("initial-state").classList.add("hidden");
+      document.getElementById("verse-reader").classList.remove("hidden");
+      document.getElementById("reader-header").classList.remove("hidden");
+
+      document.getElementById("scripture-name").innerText = scriptureName;
+      document.getElementById("chapter-name").innerText = chapterDisplayName;
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}/${fileName}`);
+        const data = await res.json();
+        const markdown = atob(data.content);
+
+        // Parse verses from markdown (basic but effective)
+        verses = parseVersesFromMarkdown(markdown);
+        currentIndex = 0;
+
+        renderCurrentVerse();
+
+      } catch (e) {
+        alert("Failed to load chapter content");
+      }
     }
 
-    // ==================== INITIALIZE ====================
-    window.onload = function() {
-      loadScriptures();
+    // Simple verse parser (customize if needed)
+    function parseVersesFromMarkdown(markdown) {
+      const lines = markdown.split("\n");
+      let currentVerse = { sanskrit: "", translation: "", explanation: "" };
+      let parsedVerses = [];
+      let mode = "";
+
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+
+        if (line.startsWith("##") || line.startsWith("#")) {
+          if (currentVerse.sanskrit) parsedVerses.push(currentVerse);
+          currentVerse = { sanskrit: "", translation: "", explanation: "" };
+          mode = "title";
+          continue;
+        }
+
+        if (line.toLowerCase().includes("sanskrit") || line.includes("॥")) {
+          mode = "sanskrit";
+        } else if (line.toLowerCase().includes("translation")) {
+          mode = "translation";
+        } else if (line.toLowerCase().includes("explanation") || line.toLowerCase().includes(" purport")) {
+          mode = "explanation";
+        }
+
+        if (mode === "sanskrit") currentVerse.sanskrit += line + "\n";
+        else if (mode === "translation") currentVerse.translation += line + " ";
+        else if (mode === "explanation") currentVerse.explanation += line + " ";
+      }
+
+      if (currentVerse.sanskrit) parsedVerses.push(currentVerse);
+
+      return parsedVerses.length > 0 ? parsedVerses : [{ 
+        sanskrit: markdown, 
+        translation: "Translation not structured.", 
+        explanation: "" 
+      }];
+    }
+
+    function renderCurrentVerse() {
+      const verse = verses[currentIndex];
+
+      document.getElementById("current-verse").innerText = currentIndex + 1;
+      document.getElementById("total-verses").innerText = verses.length;
+
+      document.getElementById("sanskrit-text").innerHTML = verse.sanskrit.replace(/\n/g, "<br>");
+      document.getElementById("translation-text").innerText = verse.translation.trim();
+      document.getElementById("explanation-text").innerHTML = verse.explanation.trim() || "No explanation available.";
+      document.getElementById("explanation-text").classList.add("hidden");
+      document.getElementById("explanation-toggle-text").innerText = "Show";
+
+      // Enable/disable buttons
+      document.getElementById("btn-prev").disabled = currentIndex === 0;
+      document.getElementById("btn-next").disabled = currentIndex === verses.length - 1;
+    }
+
+    function nextVerse() {
+      if (currentIndex < verses.length - 1) {
+        currentIndex++;
+        renderCurrentVerse();
+      }
+    }
+
+    function previousVerse() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCurrentVerse();
+      }
+    }
+
+    function toggleExplanation() {
+      const exp = document.getElementById("explanation-text");
+      const toggleText = document.getElementById("explanation-toggle-text");
+
+      if (exp.classList.contains("hidden")) {
+        exp.classList.remove("hidden");
+        toggleText.innerText = "Hide";
+      } else {
+        exp.classList.add("hidden");
+        toggleText.innerText = "Show";
+      }
+    }
+
+    function goBackToLibrary() {
+      location.reload(); // Simple way to reset
+    }
+
+    // Start
+    window.onload = () => {
+      // Auto load scripture list on start
+      loadScriptureList();
     }
   </script>
 </body>
