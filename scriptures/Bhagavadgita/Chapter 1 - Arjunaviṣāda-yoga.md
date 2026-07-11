@@ -1,4 +1,5 @@
-(The setup in which the Gītā-teaching is imparted is the epic battle of
+# (The setup in which the Gītā-teaching is imparted is the epic battle of
+
 Mahābhārata, fought between the Pāṇḍavas and Kauravas. Arjuna,
 the Pāṇḍava, discovers the problem of saṃsāra in the battlefield. He
 surrenders to Lord Kṛṣṇa seeking a solution. Then follows the great

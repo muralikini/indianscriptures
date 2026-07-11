@@ -1,5 +1,5 @@
+# [In the 13th chapter, Lord Kṛṣṇa said that it is the association with the
 
-[In the 13th chapter, Lord Kṛṣṇa said that it is the association with the
 guṇas of prakṛti that is responsible for rebirth i.e. saṃsāra (XIII-22).
 In this chapter, the Lord deals with this topic elaborately and shows
 how one can be free from these binding guṇas.]

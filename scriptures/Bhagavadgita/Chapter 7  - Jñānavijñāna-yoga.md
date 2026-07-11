@@ -1,5 +1,5 @@
+# [In the first six chapters ofGītā, Lord Kṛṣṇa discussed the nature of the
 
-[In the first six chapters ofGītā, Lord Kṛṣṇa discussed the nature of the
 individual, karmayoga, etc. predominantly. In the following six chap-
 ters, the Lord will predominantly discuss the nature of God, worship of
 God with attributes (upāsanā), etc. The individual effort was empha-

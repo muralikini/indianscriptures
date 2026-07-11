@@ -1,5 +1,5 @@
+# [In the first six chapters, Lord Kṛṣṇa talked about the nature of jīva
 
-[In the first six chapters, Lord Kṛṣṇa talked about the nature of jīva
 (tvam-pada) and karmayoga predominantly. In the second six chapters,
 Bhagavān discussed the nature of Īśvara (tat-pada) and upāsanā pre-
 dominantly — especially virāḍ-upāsanā. When a seeker goes through
@@ -96,4 +96,3 @@ The main topics in this chapter are:
 
 Since the main topic is the discrimination between the kṣetram
 and kṣetrajña, this chapter is called Kṣetrakṣetrajñavibhāga-yoga.
-

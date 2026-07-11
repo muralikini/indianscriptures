@@ -1,4 +1,5 @@
-Lord Kṛṣṇa introduced the topic of meditation towards the end of the
+# Lord Kṛṣṇa introduced the topic of meditation towards the end of the
+
 last chapter. Being an important topic, Kṛṣṇa spends almost the whole
 of this chapter dealing with meditation. [Here, meditation is upon the
 Lord as the very Self (Ātmā) of the meditator. This is meant to assim-

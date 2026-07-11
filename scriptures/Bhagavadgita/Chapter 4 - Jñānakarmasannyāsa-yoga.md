@@ -1,5 +1,5 @@
+# (Lord Kṛṣṇa dealt with karmayoga and sāṅkhyayoga in the third and
 
-(Lord Kṛṣṇa dealt with karmayoga and sāṅkhyayoga in the third and
 second chapters respectively. These two yogas are not newly intro-
 duced by Kṛṣṇa. It has been initiated by the Lord in the beginning
 of the creation itself through the karma-kāṇḍa and jñāna-kāṇḍa of the

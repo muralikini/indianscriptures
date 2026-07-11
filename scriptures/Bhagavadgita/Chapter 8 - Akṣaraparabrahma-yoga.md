@@ -1,5 +1,5 @@
+# [Lord Kṛṣṇa concluded the seventh chapter by gloriying jñāni-bhakta
 
-[Lord Kṛṣṇa concluded the seventh chapter by gloriying jñāni-bhakta
 as one who knows Brahman, adhyātma, karma, adhibūta and adhiya-
 jña (i.e., the complete nature of God consisting of parā and aparā-
 prakṛti). He remembers the God at the time of death also.]

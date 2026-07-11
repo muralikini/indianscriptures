@@ -1,4 +1,5 @@
-[In the 13th and 14th chapters, the Lord dealt with themain theme of the
+# [In the 13th and 14th chapters, the Lord dealt with themain theme of the
+
 Gītā — the essential oneness of jīva and Īśvara. Being a subtle topic,
 Kṛṣṇa discusses the same in this chapter also, in a different way.]
 

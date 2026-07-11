@@ -1,5 +1,5 @@
+# [In the previous three chapters, Lord Kṛṣṇa revealed God as the ma-
 
-[In the previous three chapters, Lord Kṛṣṇa revealed God as the ma-
 terial cause of the universe. Since the effect cannot be different from
 the material cause, it clearly follows that the universe cannot be differ-
 ent from God. Thus the entire universe is the divine manifestation of
@@ -63,4 +63,3 @@ The main topics of this chapter are:
 
 Since the main theme of this chapter is the Lord’s glories, this
 chapter is called Vibhūti-yoga.
-

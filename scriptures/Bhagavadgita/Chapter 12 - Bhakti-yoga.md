@@ -1,4 +1,5 @@
-(The eleventh chapter has paved the way for virāḍ-bhakti. So, in the
+# (The eleventh chapter has paved the way for virāḍ-bhakti. So, in the
+
 twelfth chapter, the Lord deals with all aspects of bhakti leading to
 liberation.)
 

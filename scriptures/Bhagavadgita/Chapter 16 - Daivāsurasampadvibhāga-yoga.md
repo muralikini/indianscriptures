@@ -1,5 +1,5 @@
+# In the previous three chapters (XIII, XIV and XV) Bhagavān talked
 
-In the previous three chapters (XIII, XIV and XV) Bhagavān talked
 about Self-knowledge (jñānayoga) which is the direct means for lib-
 eration. In the following two chapters, Kṛṣṇa discusses the values to
 be followed by a seeker. Though values themselves do not give liber-
@@ -59,4 +59,3 @@ The topics in this chapter are:
 
 Since this chapter deals with daiva (spiritual) and āsura (materi-
 alistic) traits, it is called Daivāsurasampadvibhāga-yoga.
-

@@ -1,5 +1,5 @@
+# In the second chapter, the Lord praised Self-knowledge right from the
 
-In the second chapter, the Lord praised Self-knowledge right from the
 beginning (11, 21, 46) and criticized the karma-kāṇḍa of the Vedas (42
 to 45). Thereafter, He askedArjuna to take to karma (48). This creates
 a serious doubt in Arjuna and the third chapter begins with this doubt.

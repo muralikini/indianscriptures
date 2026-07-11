@@ -1,4 +1,5 @@
-Lord Kṛṣṇa dealt with Self-knowledge in the XIII, XIV and XV chap-
+# Lord Kṛṣṇa dealt with Self-knowledge in the XIII, XIV and XV chap-
+
 ters. In the XVI and XVII chapters were discussed the values without
 which the mind will not be fit to receive the knowledge of the Self.
 With this, the Lord has exhaustively dealt with all the aspects of vedan-

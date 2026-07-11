@@ -1,5 +1,5 @@
+# [In the eighth chapter, saguṇa-upāsanā was pointed out as a means to
 
-[In the eighth chapter, saguṇa-upāsanā was pointed out as a means to
 attain krama-mukti. In fact, it was an incidental topic. The aim of
 the Lord is not to teach saguṇa-upāsanā as a means for krama-mukti.
 The main purpose of upāsanā is to qualify oneself to know the true

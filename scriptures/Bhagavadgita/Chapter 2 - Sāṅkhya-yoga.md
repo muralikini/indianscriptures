@@ -1,4 +1,5 @@
-Chapter 2 - Sāṅkhya-yoga
+# Chapter 2 - Sāṅkhya-yoga
+
 In the first chapter, Arjuna was shown to be completely immersed in
 grief (śoka) caused by attachment (rāga) and delusion (moha). Inde-
 pendently analyzing the problem, he comes to the conclusion that with-

@@ -1,5 +1,5 @@
+# (In the previous four chapters, Kṛṣṇa established that the entire uni-
 
-(In the previous four chapters, Kṛṣṇa established that the entire uni-
 verse is a manifestation of God and, therefore, any glory in the cre-
 ation belongs to God alone. Now, in this chapter, Arjuna appreciates
 this teaching and sees the universe as the very Lord.)

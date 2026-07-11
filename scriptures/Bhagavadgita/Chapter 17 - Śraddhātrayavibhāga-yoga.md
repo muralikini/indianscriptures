@@ -1,5 +1,5 @@
+# In the previous chapter, Bhagavān said that śāstra is the pramāṇa in
 
-In the previous chapter, Bhagavān said that śāstra is the pramāṇa in
 determining what is right and wrong and that one should act according
 to what śāstra says. Based on this,Arjuna raises a question here— “To
 what category does a person belong if he worships with faith without

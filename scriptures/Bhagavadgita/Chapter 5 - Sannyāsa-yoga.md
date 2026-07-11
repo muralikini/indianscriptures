@@ -1,5 +1,5 @@
+# In the fourth chapter, Lord Kṛṣṇa talked about knowledge and renunci-
 
-In the fourth chapter, Lord Kṛṣṇa talked about knowledge and renunci-
 ation. He referred to the wiseman as one whose karmas are burnt by the
 fire of knowledge (IV-19). He glorified the wiseman as one who is free
 from possessions, whose only activity is the maintenance of the body 12
