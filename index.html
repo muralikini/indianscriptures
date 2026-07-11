@@ -1,333 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scripture Reader • Summaries</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        .scripture-card { transition: all 0.2s ease; }
-        .scripture-card:hover { transform: translateX(4px); background-color: #27251f; }
-        .chapter-item:hover { background-color: #27251f; }
-        .reading-area { font-size: 15.5px; line-height: 1.75; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scriptures • Digital Library</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap');
+    
+    body { font-family: 'Inter', system_ui, sans-serif; }
+    .heading-serif { font-family: 'Playfair Display', Georgia, serif; }
+    
+    .sanskrit-text {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: #e8dcc4;
+    }
+    
+    .verse-card {
+      transition: all 0.2s ease;
+    }
+    
+    .nav-active {
+      background-color: #1c1915;
+      border-color: #c9a26f;
+      color: #c9a26f;
+    }
+    
+    .scripture-content {
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
 </head>
-<body class="bg-zinc-950 text-zinc-200">
-    <!-- Navbar -->
-    <nav class="bg-zinc-900 border-b border-zinc-800">
-        <div class="max-w-screen-2xl mx-auto px-8 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-x-3">
-                <div class="w-9 h-9 bg-orange-600 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-book text-white"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-semibold tracking-tight">Scripture Reader</h1>
-                    <p class="text-xs text-zinc-400 -mt-1">Summaries &amp; Chapters</p>
-                </div>
-            </div>
-
-            <!-- Search -->
-            <div class="flex-1 max-w-md mx-8">
-                <div class="relative">
-                    <input id="search-input" type="text" placeholder="Search across all scriptures..." 
-                           class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-5 py-2.5 text-sm focus:outline-none focus:border-orange-500">
-                    <i class="fas fa-search absolute right-5 top-3 text-zinc-400"></i>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-x-3">
-                <!-- Theme Toggle -->
-                <button onclick="toggleTheme()" 
-                        class="w-10 h-10 flex items-center justify-center bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 rounded-2xl">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
-                
-                <a href="https://github.com" target="_blank"
-                   class="px-4 py-2 text-sm bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 rounded-2xl flex items-center gap-x-2">
-                    <i class="fab fa-github"></i>
-                    <span>GitHub</span>
-                </a>
-            </div>
+<body class="bg-[#0f0e0c] text-[#e8e0d0]">
+  
+  <!-- Header -->
+  <div class="border-b border-[#3a3024] bg-[#0f0e0c]">
+    <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-x-3">
+        <div class="w-10 h-10 bg-[#c9a26f] rounded-2xl flex items-center justify-center">
+          <i class="fa-solid fa-book text-[#0f0e0c] text-2xl"></i>
         </div>
-    </nav>
-
-    <div class="flex max-w-screen-2xl mx-auto">
-        
-        <!-- Left Sidebar - Scriptures -->
-        <div class="w-80 border-r border-zinc-800 bg-zinc-900 min-h-screen p-6">
-            <h2 class="text-sm font-semibold text-zinc-400 px-2 mb-4">SCRIPTURES</h2>
-            <div id="scriptures-list" class="space-y-1">
-                <!-- Dynamically loaded -->
-            </div>
+        <div>
+          <h1 class="text-2xl font-semibold tracking-tight heading-serif">Scriptures</h1>
+          <p class="text-[#a38b5f] text-xs tracking-[1px]">DIGITAL LIBRARY</p>
         </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 p-8">
-            
-            <!-- Breadcrumb -->
-            <div id="breadcrumb" class="flex items-center gap-x-2 text-sm text-zinc-400 mb-6">
-                <!-- Populated by JS -->
-            </div>
-
-            <!-- Chapter List View -->
-            <div id="chapter-list-view">
-                <h2 id="current-scripture-title" class="text-3xl font-semibold mb-1"></h2>
-                <p class="text-zinc-400 mb-6">Select a chapter to read</p>
-                
-                <div id="chapters-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <!-- Chapters loaded dynamically -->
-                </div>
-            </div>
-
-            <!-- Reading View -->
-            <div id="reading-view" class="hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 id="chapter-title" class="text-3xl font-semibold"></h2>
-                        <p id="chapter-subtitle" class="text-zinc-400"></p>
-                    </div>
-                    
-                    <div class="flex items-center gap-x-2">
-                        <button onclick="printChapter()" 
-                                class="px-4 py-2 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 rounded-2xl text-sm flex items-center gap-x-2">
-                            <i class="fas fa-print"></i>
-                            <span>Print</span>
-                        </button>
-                        <button onclick="shareChapter()" 
-                                class="px-4 py-2 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 rounded-2xl text-sm flex items-center gap-x-2">
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Content -->
-                <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-10 min-h-[500px]">
-                    <div id="chapter-content" class="reading-area whitespace-pre-line text-zinc-200 leading-relaxed">
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="flex items-center justify-between mt-6">
-                    <button onclick="prevPage()" id="prev-btn"
-                            class="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-2xl flex items-center gap-x-2 disabled:opacity-50">
-                        <i class="fas fa-chevron-left"></i>
-                        <span>Previous</span>
-                    </button>
-                    
-                    <div class="text-sm text-zinc-400">
-                        Page <span id="current-page">1</span> of <span id="total-pages">1</span>
-                    </div>
-                    
-                    <button onclick="nextPage()" id="next-btn"
-                            class="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-2xl flex items-center gap-x-2 disabled:opacity-50">
-                        <span>Next</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+      </div>
+      
+      <div class="flex items-center gap-x-2 text-sm">
+        <div class="px-4 py-1.5 bg-[#1c1915] rounded-2xl border border-[#3a3024] flex items-center gap-x-2">
+          <i class="fa-solid fa-globe text-[#c9a26f]"></i>
+          <span class="text-[#c9a26f]">Public Library</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto flex">
+    
+    <!-- Sidebar: Scriptures -->
+    <div class="w-72 border-r border-[#3a3024] min-h-screen p-6">
+      <div class="mb-4 px-1">
+        <div class="text-xs tracking-[1.5px] text-[#a38b5f] mb-2">ALL SCRIPTURES</div>
+      </div>
+      
+      <div id="scripture-list" class="space-y-1">
+        <!-- Populated dynamically via JavaScript -->
+        <div class="text-[#a38b5f] text-sm px-3 py-2">Loading scriptures...</div>
+      </div>
     </div>
 
-    <script>
-        // ==================== CONFIGURATION ====================
-        const GITHUB_OWNER = "muralikini";           // ← Change to your GitHub username
-        const GITHUB_REPO = "indianscriptures";     // ← Change to your repo name
-        const SCRIPTURES_PATH = "scriptures";        // Folder where all scriptures are stored
+    <!-- Main Content Area -->
+    <div class="flex-1 p-8">
+      
+      <!-- Scripture Header -->
+      <div id="scripture-header" class="hidden mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 id="scripture-title" class="text-4xl font-semibold heading-serif tracking-tight"></h2>
+            <p id="scripture-subtitle" class="text-[#a38b5f] mt-1"></p>
+          </div>
+          <button onclick="showScriptureList()" 
+                  class="px-5 py-2 text-sm flex items-center gap-x-2 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl transition-colors">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Library</span>
+          </button>
+        </div>
+      </div>
 
-        const LINES_PER_PAGE = 28;                   // Fixed lines per page
+      <!-- Chapters Grid -->
+      <div id="chapters-section" class="hidden">
+        <div class="text-xs tracking-[1.5px] text-[#a38b5f] mb-3 px-1">CHAPTERS</div>
+        <div id="chapters-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
 
-        let currentScripture = null;
-        let currentChapter = null;
-        let currentContent = "";
-        let currentPage = 1;
-        let totalPages = 1;
-        let allScriptures = [];
+      <!-- Reading Area (Digital Scripture Book Style) -->
+      <div id="reading-area" class="hidden">
+        <div class="scripture-content">
+          <div id="reading-content" class="space-y-8">
+            <!-- Content loaded here dynamically -->
+          </div>
+        </div>
+      </div>
 
-        // ==================== GITHUB API HELPERS ====================
-        async function fetchFromGitHub(path) {
-            const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`;
-            const res = await fetch(url);
-            if (!res.ok) throw new Error("Failed to fetch from GitHub");
-            return await res.json();
-        }
+    </div>
+  </div>
 
-        // Load all scriptures (folders)
-        async function loadScriptures() {
-            try {
-                const data = await fetchFromGitHub(SCRIPTURES_PATH);
-                const folders = data.filter(item => item.type === "dir");
-                
-                allScriptures = folders;
-                renderScripturesList(folders);
-            } catch (error) {
-                console.error(error);
-                document.getElementById("scriptures-list").innerHTML = 
-                    `<p class="text-red-400 px-3">Failed to load scriptures. Check GitHub config.</p>`;
-            }
-        }
+  <script>
+    // ==================== CONFIGURATION ====================
+    const GITHUB_OWNER = "muralikini";           // ← Change if needed
+    const GITHUB_REPO = "indianscriptures";      // ← Your repo name
+    const SCRIPTURES_PATH = "scriptures";        // Folder containing all scriptures
 
-        function renderScripturesList(folders) {
-            const container = document.getElementById("scriptures-list");
-            container.innerHTML = "";
+    let currentScripture = "";
+    let currentChapter = "";
 
-            folders.forEach(folder => {
-                const div = document.createElement("div");
-                div.className = `scripture-card flex items-center gap-x-3 px-4 py-3 rounded-2xl cursor-pointer hover:bg-zinc-800`;
-                div.innerHTML = `
-                    <i class="fas fa-book text-orange-400 w-5"></i>
-                    <span class="font-medium">${folder.name.replace(/_/g, " ")}</span>
-                `;
-                div.onclick = () => loadChapters(folder.name);
-                container.appendChild(div);
-            });
-        }
+    // ==================== FETCH SCRIPTURES ====================
+    async function loadScriptures() {
+      const container = document.getElementById("scripture-list");
+      container.innerHTML = `<div class="text-[#a38b5f] text-sm px-3 py-2">Loading...</div>`;
 
-        // Load chapters of a scripture
-        async function loadChapters(scriptureName) {
-            currentScripture = scriptureName;
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}`);
+        const data = await res.json();
+
+        container.innerHTML = "";
+
+        data.forEach(item => {
+          if (item.type === "dir") {
+            const div = document.createElement("div");
+            div.className = `px-4 py-3 rounded-2xl cursor-pointer flex items-center gap-x-3 hover:bg-[#1c1915] transition-colors text-sm`;
+            div.innerHTML = `
+              <i class="fa-solid fa-book text-[#c9a26f]"></i>
+              <span>${item.name}</span>
+            `;
+            div.onclick = () => loadChapters(item.name);
+            container.appendChild(div);
+          }
+        });
+
+      } catch (error) {
+        container.innerHTML = `<div class="text-red-400 text-sm px-3">Failed to load scriptures. Make sure repo is public.</div>`;
+      }
+    }
+
+    // ==================== LOAD CHAPTERS ====================
+    async function loadChapters(scriptureName) {
+      currentScripture = scriptureName;
+      
+      document.getElementById("scripture-header").classList.remove("hidden");
+      document.getElementById("chapters-section").classList.remove("hidden");
+      document.getElementById("reading-area").classList.add("hidden");
+
+      document.getElementById("scripture-title").innerText = scriptureName;
+      document.getElementById("scripture-subtitle").innerText = "Select a chapter to begin reading";
+
+      const grid = document.getElementById("chapters-grid");
+      grid.innerHTML = `<div class="col-span-full text-[#a38b5f]">Loading chapters...</div>`;
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}`);
+        const data = await res.json();
+
+        grid.innerHTML = "";
+
+        data.forEach(file => {
+          if (file.name.endsWith(".md")) {
+            const card = document.createElement("div");
+            card.className = `bg-[#1c1915] border border-[#3a3024] hover:border-[#c9a26f] rounded-2xl p-4 cursor-pointer transition-all`;
             
-            // Update UI
-            document.getElementById("chapter-list-view").classList.remove("hidden");
-            document.getElementById("reading-view").classList.add("hidden");
+            const chapterName = file.name.replace(".md", "").replace(/_/g, " ");
             
-            document.getElementById("current-scripture-title").textContent = scriptureName.replace(/_/g, " ");
+            card.innerHTML = `
+              <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-[#29251f] rounded-2xl flex items-center justify-center text-[#c9a26f]">
+                  <i class="fa-solid fa-scroll"></i>
+                </div>
+                <div>
+                  <div class="font-medium">${chapterName}</div>
+                </div>
+              </div>
+            `;
             
-            const container = document.getElementById("chapters-grid");
-            container.innerHTML = `<div class="col-span-full text-center py-8 text-zinc-400">Loading chapters...</div>`;
+            card.onclick = () => loadChapterContent(scriptureName, file.name, chapterName);
+            grid.appendChild(card);
+          }
+        });
 
-            try {
-                const data = await fetchFromGitHub(`${SCRIPTURES_PATH}/${scriptureName}`);
-                const files = data.filter(item => item.type === "file" && (item.name.endsWith(".txt") || item.name.endsWith(".md")));
-                
-                container.innerHTML = "";
+      } catch (error) {
+        grid.innerHTML = `<div class="text-red-400">Failed to load chapters.</div>`;
+      }
+    }
 
-                if (files.length === 0) {
-                    container.innerHTML = `<p class="col-span-full text-zinc-400">No chapters found.</p>`;
-                    return;
-                }
+    // ==================== LOAD CHAPTER CONTENT (Beautiful Book Style) ====================
+    async function loadChapterContent(scriptureName, fileName, displayName) {
+      currentChapter = displayName;
+      
+      document.getElementById("chapters-section").classList.add("hidden");
+      document.getElementById("reading-area").classList.remove("hidden");
 
-                files.sort((a, b) => a.name.localeCompare(b.name));
+      const contentDiv = document.getElementById("reading-content");
+      contentDiv.innerHTML = `
+        <div class="text-center py-12">
+          <i class="fa-solid fa-spinner fa-spin text-2xl text-[#c9a26f]"></i>
+          <p class="mt-4 text-[#a38b5f]">Loading sacred text...</p>
+        </div>
+      `;
 
-                files.forEach(file => {
-                    const div = document.createElement("div");
-                    div.className = `chapter-item bg-zinc-900 border border-zinc-700 p-4 rounded-2xl cursor-pointer`;
-                    div.innerHTML = `
-                        <div class="font-medium">${file.name.replace(/\.(txt|md)$/, "").replace(/_/g, " ")}</div>
-                    `;
-                    div.onclick = () => loadChapterContent(scriptureName, file.name);
-                    container.appendChild(div);
-                });
-            } catch (error) {
-                container.innerHTML = `<p class="text-red-400">Failed to load chapters.</p>`;
-            }
-        }
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}/${fileName}`);
+        const data = await res.json();
+        
+        // Decode base64 content
+        const markdown = atob(data.content);
+        
+        // Simple beautiful rendering
+        contentDiv.innerHTML = `
+          <div class="mb-8">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-3xl font-semibold heading-serif">${displayName}</h3>
+                <p class="text-[#a38b5f]">${scriptureName}</p>
+              </div>
+              <button onclick="loadChapters('${scriptureName}')" 
+                      class="px-4 py-2 text-sm bg-[#1c1915] border border-[#3a3024] rounded-2xl flex items-center gap-x-2 hover:bg-[#29251f]">
+                <i class="fa-solid fa-list"></i>
+                <span>Chapters</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="prose prose-invert max-w-none">
+            ${renderMarkdownBeautifully(markdown)}
+          </div>
+        `;
 
-        // Load single chapter content + pagination
-        async function loadChapterContent(scriptureName, chapterName) {
-            currentChapter = chapterName;
-            
-            document.getElementById("chapter-list-view").classList.add("hidden");
-            document.getElementById("reading-view").classList.remove("hidden");
+      } catch (error) {
+        contentDiv.innerHTML = `<div class="text-red-400">Failed to load chapter content.</div>`;
+      }
+    }
 
-            document.getElementById("chapter-title").textContent = chapterName.replace(/\.(txt|md)$/, "").replace(/_/g, " ");
-            document.getElementById("chapter-subtitle").textContent = scriptureName.replace(/_/g, " ");
+    // Simple but beautiful Markdown renderer (for scripture style)
+    function renderMarkdownBeautifully(markdown) {
+      let html = markdown
+        .replace(/^### (.*$)/gm, '<h3 class="text-xl font-semibold mt-8 mb-3 text-[#c9a26f]">$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-semibold mt-10 mb-4 heading-serif">$1</h2>')
+        .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-semibold mt-2 mb-6 heading-serif">$1</h1>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#e8dcc4]">$1</strong>')
+        .replace(/\n\n/g, '</p><p class="mb-4 text-[#d4c9b0] leading-relaxed">')
+        .replace(/\n/g, '<br>');
 
-            const contentEl = document.getElementById("chapter-content");
-            contentEl.innerHTML = "Loading content...";
+      // Wrap in paragraphs
+      html = `<p class="mb-4 text-[#d4c9b0] leading-relaxed">${html}</p>`;
+      
+      return html;
+    }
 
-            try {
-                const filePath = `${SCRIPTURES_PATH}/${scriptureName}/${chapterName}`;
-                const data = await fetchFromGitHub(filePath);
-                
-                // Decode base64 content
-                currentContent = atob(data.content);
-                
-                // Reset pagination
-                currentPage = 1;
-                renderPaginatedContent();
-            } catch (error) {
-                contentEl.innerHTML = "Failed to load chapter content.";
-            }
-        }
+    function showScriptureList() {
+      document.getElementById("scripture-header").classList.add("hidden");
+      document.getElementById("chapters-section").classList.add("hidden");
+      document.getElementById("reading-area").classList.add("hidden");
+    }
 
-        function renderPaginatedContent() {
-            const lines = currentContent.split("\n");
-            totalPages = Math.ceil(lines.length / LINES_PER_PAGE);
-            
-            const start = (currentPage - 1) * LINES_PER_PAGE;
-            const end = start + LINES_PER_PAGE;
-            const pageLines = lines.slice(start, end);
-
-            document.getElementById("chapter-content").innerHTML = pageLines.join("<br>");
-            document.getElementById("current-page").textContent = currentPage;
-            document.getElementById("total-pages").textContent = totalPages;
-
-            // Enable/disable buttons
-            document.getElementById("prev-btn").disabled = currentPage === 1;
-            document.getElementById("next-btn").disabled = currentPage === totalPages;
-        }
-
-        function nextPage() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderPaginatedContent();
-            }
-        }
-
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderPaginatedContent();
-            }
-        }
-
-        function printChapter() {
-            const printWindow = window.open("", "_blank");
-            printWindow.document.write(`
-                <html>
-                    <head><title>${document.getElementById("chapter-title").textContent}</title></head>
-                    <body style="font-family: system-ui; padding: 40px; line-height: 1.7;">
-                        <h1>${document.getElementById("chapter-title").textContent}</h1>
-                        <pre style="white-space: pre-wrap;">${currentContent}</pre>
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
-        }
-
-        function shareChapter() {
-            const text = `${document.getElementById("chapter-title").textContent}\n\n${currentContent.substring(0, 300)}...`;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Chapter link copied to clipboard!");
-            });
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            html.classList.toggle("dark");
-            
-            const icon = document.getElementById("theme-icon");
-            if (html.classList.contains("dark")) {
-                icon.classList.replace("fa-sun", "fa-moon");
-            } else {
-                icon.classList.replace("fa-moon", "fa-sun");
-            }
-        }
-
-        // Initialize
-        async function init() {
-            await loadScriptures();
-            
-            // Optional: Auto-select first scripture
-            // setTimeout(() => {
-            //     if (allScriptures.length > 0) loadChapters(allScriptures[0].name);
-            // }, 800);
-        }
-
-        window.onload = init;
-    </script>
+    // ==================== INITIALIZE ====================
+    window.onload = function() {
+      loadScriptures();
+    }
+  </script>
 </body>
 </html>
