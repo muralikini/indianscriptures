@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scripture PDFs • Page by Page</title>
+  <title>Scriptures • Reader</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     body { font-family: 'Inter', system_ui, sans-serif; }
@@ -17,44 +16,76 @@
       border: 1px solid #3a3024;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
-    #pdf-canvas {
-      width: 100%;
-      border-radius: 12px;
-    }
   </style>
 </head>
 <body class="bg-[#0f0e0c] text-[#e8e0d0]">
 
-  <!-- Header -->
-  <div class="border-b border-[#3a3024]">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+  <!-- Top Navigation Bar -->
+  <div class="border-b border-[#3a3024] bg-[#0f0e0c] sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      
       <div class="flex items-center gap-x-3">
-        <div class="w-10 h-10 bg-[#c9a26f] rounded-2xl flex items-center justify-center">
+        <div class="w-9 h-9 bg-[#c9a26f] rounded-2xl flex items-center justify-center">
           <i class="fa-solid fa-book text-[#0f0e0c]"></i>
         </div>
-        <span class="text-2xl font-semibold tracking-tight">Scriptures</span>
+        <span class="text-xl font-semibold tracking-tight">Scriptures</span>
       </div>
-      <button onclick="location.reload()" 
-              class="px-5 py-2 text-sm flex items-center gap-x-2 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl">
-        <i class="fa-solid fa-home"></i>
-        <span>Library</span>
-      </button>
+
+      <!-- Current Location + Quick Actions -->
+      <div id="top-nav-actions" class="hidden items-center gap-x-3">
+        <div class="flex items-center gap-x-2 text-sm">
+          <span id="nav-scripture" class="text-[#a38b5f]"></span>
+          <span class="text-[#3a3024]">/</span>
+          <span id="nav-chapter" class="font-medium"></span>
+        </div>
+
+        <button onclick="showChapterList()" 
+                class="px-4 py-2 text-sm flex items-center gap-x-2 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl">
+          <i class="fa-solid fa-list"></i>
+          <span>Change Chapter</span>
+        </button>
+
+        <button onclick="goToLibrary()" 
+                class="px-4 py-2 text-sm flex items-center gap-x-2 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl">
+          <i class="fa-solid fa-home"></i>
+          <span>Library</span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 pt-8">
+  <div class="max-w-7xl mx-auto px-6 pt-8">
 
     <!-- Library View -->
     <div id="library-view">
-      <div class="max-w-2xl mx-auto text-center pt-8">
+      <div class="max-w-2xl mx-auto text-center pt-10">
         <i class="fa-solid fa-books text-6xl text-[#3a3024]"></i>
         <h2 class="mt-6 text-3xl font-semibold">Digital Scripture Library</h2>
-        <p class="text-[#a38b5f] mt-2">Select a scripture to read chapter PDFs page by page</p>
+        <p class="text-[#a38b5f] mt-2">Read chapter PDFs page by page</p>
         <button onclick="loadScriptures()" 
-                class="mt-8 px-8 py-3 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl flex items-center gap-x-3 mx-auto">
+                class="mt-8 px-8 py-3.5 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl flex items-center gap-x-3 mx-auto">
           <i class="fa-solid fa-folder-open"></i>
           <span>Browse Scriptures</span>
         </button>
+      </div>
+    </div>
+
+    <!-- Scripture Chapters View -->
+    <div id="chapters-view" class="hidden max-w-4xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div class="text-[#a38b5f] text-sm">SCRIPTURE</div>
+          <div id="chapters-scripture-name" class="text-3xl font-semibold"></div>
+        </div>
+        <button onclick="goToLibrary()" class="text-sm px-4 py-2 bg-[#1c1915] border border-[#3a3024] rounded-2xl flex items-center gap-x-2">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back</span>
+        </button>
+      </div>
+
+      <div class="text-[#a38b5f] text-sm mb-3 px-1">CHAPTERS</div>
+      <div id="chapters-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <!-- Populated dynamically -->
       </div>
     </div>
 
@@ -62,40 +93,30 @@
     <div id="pdf-reader" class="hidden">
       <div class="max-w-[820px] mx-auto">
         
-        <!-- Chapter Info -->
-        <div class="flex items-center justify-between mb-4 px-2">
-          <div>
-            <div id="scripture-name" class="text-[#a38b5f] text-sm"></div>
-            <div id="chapter-name" class="text-2xl font-semibold"></div>
-          </div>
-          <div class="text-sm text-[#a38b5f]">
-            Page <span id="current-page" class="font-medium text-white">1</span> 
-            of <span id="total-pages">1</span>
-          </div>
+        <!-- Page Info -->
+        <div class="flex justify-end mb-3 text-sm text-[#a38b5f]">
+          Page <span id="current-page" class="font-medium text-white mx-1">1</span> of <span id="total-pages">1</span>
         </div>
 
-        <!-- PDF Page Container -->
+        <!-- PDF Display -->
         <div class="book-container rounded-3xl p-6">
-          <canvas id="pdf-canvas" class="w-full rounded-2xl shadow-inner"></canvas>
+          <canvas id="pdf-canvas" class="w-full rounded-2xl"></canvas>
         </div>
 
-        <!-- Navigation -->
+        <!-- Navigation Buttons -->
         <div class="flex items-center justify-between mt-6">
-          <button onclick="prevPage()" 
-                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl disabled:opacity-40"
-                  id="btn-prev">
+          <button onclick="prevPage()" id="btn-prev"
+                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl disabled:opacity-40">
             <i class="fa-solid fa-chevron-left"></i>
             <span>Previous Page</span>
           </button>
 
-          <button onclick="nextPage()" 
-                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-2xl disabled:opacity-40"
-                  id="btn-next">
+          <button onclick="nextPage()" id="btn-next"
+                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-2xl disabled:opacity-40">
             <span>Next Page</span>
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
-
       </div>
     </div>
 
@@ -111,11 +132,15 @@
     let totalPages = 1;
     let currentScripture = "";
     let currentChapter = "";
+    let currentChapterFile = "";
 
-    // Load list of scriptures (folders)
+    // ================== LOAD SCRIPTURES ==================
     async function loadScriptures() {
+      hideAllViews();
+      document.getElementById("library-view").classList.remove("hidden");
+
       const container = document.getElementById("library-view");
-      container.innerHTML = `<div class="text-center text-[#a38b5f] mt-8">Loading...</div>`;
+      container.innerHTML = `<div class="text-center text-[#a38b5f] mt-8">Loading scriptures...</div>`;
 
       try {
         const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}`);
@@ -127,7 +152,7 @@
           if (item.type === "dir") {
             html += `
               <div onclick="loadChapters('${item.name}')" 
-                   class="flex items-center gap-x-4 px-6 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer">
+                   class="flex items-center gap-x-4 px-6 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer transition-all">
                 <i class="fa-solid fa-folder text-[#c9a26f]"></i>
                 <span class="font-medium">${item.name}</span>
               </div>
@@ -143,48 +168,52 @@
       }
     }
 
-    // Load chapter PDFs inside a scripture
+    // ================== LOAD CHAPTERS ==================
     async function loadChapters(scriptureName) {
       currentScripture = scriptureName;
-      const container = document.getElementById("library-view");
-      container.innerHTML = `<div class="text-center text-[#a38b5f] mt-8">Loading chapters...</div>`;
+      hideAllViews();
+      document.getElementById("chapters-view").classList.remove("hidden");
+
+      document.getElementById("chapters-scripture-name").innerText = scriptureName;
+
+      const grid = document.getElementById("chapters-grid");
+      grid.innerHTML = `<div class="col-span-full text-[#a38b5f]">Loading chapters...</div>`;
 
       try {
         const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SCRIPTURES_PATH}/${scriptureName}`);
         const files = await res.json();
 
-        let html = `<div class="max-w-3xl mx-auto"><div class="text-[#a38b5f] text-sm mb-3 px-1">Select Chapter PDF</div><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">`;
+        grid.innerHTML = "";
 
         files.forEach(file => {
           if (file.name.endsWith(".pdf")) {
             const name = file.name.replace(".pdf", "").replace(/_/g, " ");
-            html += `
-              <div onclick="loadPDF('${scriptureName}', '${file.name}', '${name}')" 
-                   class="px-5 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer text-sm transition-all">
-                <i class="fa-solid fa-file-pdf mr-2 text-[#c9a26f]"></i> ${name}
-              </div>
-            `;
+            const div = document.createElement("div");
+            div.className = `px-5 py-4 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl cursor-pointer text-sm transition-all`;
+            div.innerHTML = `<i class="fa-solid fa-file-pdf mr-2 text-[#c9a26f]"></i> ${name}`;
+            div.onclick = () => loadPDF(scriptureName, file.name, name);
+            grid.appendChild(div);
           }
         });
 
-        html += `</div></div>`;
-        container.innerHTML = html;
-
       } catch (e) {
-        container.innerHTML = `<p class="text-red-400">Failed to load chapters.</p>`;
+        grid.innerHTML = `<div class="text-red-400">Failed to load chapters.</div>`;
       }
     }
 
-    // Load and render PDF
+    // ================== LOAD PDF ==================
     async function loadPDF(scriptureName, fileName, chapterName) {
       currentScripture = scriptureName;
       currentChapter = chapterName;
+      currentChapterFile = fileName;
 
-      document.getElementById("library-view").classList.add("hidden");
+      hideAllViews();
       document.getElementById("pdf-reader").classList.remove("hidden");
+      document.getElementById("top-nav-actions").classList.remove("hidden");
+      document.getElementById("top-nav-actions").classList.add("flex");
 
-      document.getElementById("scripture-name").innerText = scriptureName;
-      document.getElementById("chapter-name").innerText = chapterName;
+      document.getElementById("nav-scripture").innerText = scriptureName;
+      document.getElementById("nav-chapter").innerText = chapterName;
 
       const pdfUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/${SCRIPTURES_PATH}/${scriptureName}/${fileName}`;
 
@@ -197,29 +226,22 @@
         renderPage(currentPageNum);
 
       } catch (e) {
-        alert("Failed to load PDF. Make sure the file exists in GitHub.");
-        console.error(e);
+        alert("Failed to load PDF");
       }
     }
 
-    // Render a specific page
     async function renderPage(pageNum) {
       const page = await pdfDoc.getPage(pageNum);
       const canvas = document.getElementById("pdf-canvas");
       const ctx = canvas.getContext("2d");
 
-      const viewport = page.getViewport({ scale: 1.5 });
+      const viewport = page.getViewport({ scale: 1.6 });
       canvas.width = viewport.width;
       canvas.height = viewport.height;
 
-      await page.render({
-        canvasContext: ctx,
-        viewport: viewport
-      }).promise;
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
       document.getElementById("current-page").innerText = pageNum;
-      
-      // Button states
       document.getElementById("btn-prev").disabled = pageNum === 1;
       document.getElementById("btn-next").disabled = pageNum === totalPages;
     }
@@ -238,9 +260,27 @@
       }
     }
 
+    // ================== NAVIGATION HELPERS ==================
+    function showChapterList() {
+      hideAllViews();
+      document.getElementById("top-nav-actions").classList.remove("flex");
+      document.getElementById("top-nav-actions").classList.add("hidden");
+      loadChapters(currentScripture);
+    }
+
+    function goToLibrary() {
+      location.reload();
+    }
+
+    function hideAllViews() {
+      document.getElementById("library-view").classList.add("hidden");
+      document.getElementById("chapters-view").classList.add("hidden");
+      document.getElementById("pdf-reader").classList.add("hidden");
+    }
+
     // Start
     window.onload = function() {
-      // Show library on load
+      // Show library by default
     }
   </script>
 </body>
