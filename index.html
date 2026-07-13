@@ -91,32 +91,60 @@
 
     <!-- PDF Reader -->
     <div id="pdf-reader" class="hidden">
-      <div class="max-w-[820px] mx-auto">
-        
-        <!-- Page Info -->
-        <div class="flex justify-end mb-3 text-sm text-[#a38b5f]">
-          Page <span id="current-page" class="font-medium text-white mx-1">1</span> of <span id="total-pages">1</span>
+      <div class="max-w-[980px] mx-auto px-4">
+
+        <!-- Top info -->
+        <div class="flex justify-between items-center mb-4 px-2">
+          <div>
+            <div id="reader-person" class="text-[#a38b5f] text-sm"></div>
+            <div id="reader-pdf-name" class="font-medium text-base md:text-lg"></div>
+          </div>
+          <div class="text-sm text-[#a38b5f]">
+            Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+          </div>
         </div>
 
-        <!-- PDF Display -->
-        <div class="book-container rounded-3xl p-6">
-          <canvas id="pdf-canvas" class="w-full rounded-2xl"></canvas>
+        <!-- Responsive PDF Viewer -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+
+          <!-- LEFT BUTTON (Desktop only) -->
+          <div class="hidden md:block flex-shrink-0">
+            <button onclick="prevPage()" id="btn-prev"
+                    class="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-full text-xl md:text-2xl transition-all disabled:opacity-40">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+          </div>
+
+          <!-- PDF Canvas -->
+          <div class="book-container rounded-3xl p-4 md:p-6 w-full max-w-[820px] mx-auto">
+            <canvas id="pdf-canvas" class="w-full rounded-2xl"></canvas>
+          </div>
+
+          <!-- RIGHT BUTTON (Desktop only) -->
+          <div class="hidden md:block flex-shrink-0">
+            <button onclick="nextPage()" id="btn-next"
+                    class="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-full text-xl md:text-2xl transition-all disabled:opacity-40">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+
         </div>
 
-        <!-- Navigation Buttons -->
-        <div class="flex items-center justify-between mt-6">
-          <button onclick="prevPage()" id="btn-prev"
-                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl disabled:opacity-40">
+        <!-- Mobile Bottom Navigation -->
+        <div class="flex md:hidden justify-center gap-4 mt-6">
+          <button onclick="prevPage()" id="btn-prev-mobile"
+                  class="flex items-center gap-x-2 px-6 py-3 bg-[#1c1915] hover:bg-[#29251f] border border-[#3a3024] rounded-2xl text-sm disabled:opacity-40">
             <i class="fa-solid fa-chevron-left"></i>
-            <span>Previous Page</span>
+            <span>Previous</span>
           </button>
 
-          <button onclick="nextPage()" id="btn-next"
-                  class="flex items-center gap-x-3 px-6 py-3.5 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-2xl disabled:opacity-40">
-            <span>Next Page</span>
+          <button onclick="nextPage()" id="btn-next-mobile"
+                  class="flex items-center gap-x-2 px-6 py-3 bg-[#c9a26f] hover:bg-[#b38c55] text-[#0f0e0c] font-medium rounded-2xl text-sm disabled:opacity-40">
+            <span>Next</span>
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
+
       </div>
     </div>
 
